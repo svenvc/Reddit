@@ -18,10 +18,10 @@ BaselineOfReddit >> baselineOf: spec [
 	spec
 		for: #common
 		do: [
-			spec baseline: 'NeoConsole' with: [ spec repository: 'github://svenvc/NeoConsole:master/repository' ].
+			spec baseline: 'NeoConsole' with: [ spec repository: 'github://svenvc/NeoConsole:master/src' ].
 			spec baseline: 'ZincHTTPComponents' with: [ spec repository: 'github://svenvc/zinc:master/repository' ].
 			spec baseline: 'Seaside3' with: [ spec repository: 'github://SeasideSt/Seaside:master/repository' ].
-			spec baseline: 'P3' with: [ spec repository: 'github://svenvc/P3:master/repository'; loads: #('glorp') ].
+			spec baseline: 'P3' with: [ spec repository: 'github://svenvc/P3:master'; loads: #('glorp') ].
 			spec package: 'Reddit' with: [ spec requires: #('ZincHTTPComponents' 'Seaside3' 'P3' 'NeoConsole') ].
 			spec group: 'default' with: #('Reddit').
 			spec group: 'core' with: #('Reddit') ]
