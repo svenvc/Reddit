@@ -5,3 +5,16 @@ The focus is not so much on the smaller size or the higher developer productivit
 
 The following article describes the code in this repository:
 https://medium.com/@svenvc/reddit-st-in-10-cool-pharo-classes-1b5327ca0740
+
+## Installation
+
+The following expression loads all code and its dependencies (latest Zinc HTTP Components, NeoConsole, P3 with Glorp and Seaside 3) using the project's Baseline:
+
+````Smalltalk
+Metacello new
+   baseline: 'Reddit';
+   repository: 'github://svenvc/Reddit';
+   load.
+````
+
+Deploy instruction can be found in a separate [document](DEPLOY.md).
