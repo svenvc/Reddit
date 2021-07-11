@@ -8,7 +8,7 @@ https://medium.com/@svenvc/reddit-st-in-10-cool-pharo-classes-1b5327ca0740
 
 ## Installation
 
-The following expression loads all code and its dependencies (latest Zinc HTTP Components, NeoConsole, P3 with Glorp and Seaside 3) using the project's Baseline:
+The following expression loads all code and its dependencies (latest [Zinc HTTP Components](https://github.com/svenvc/zinc), [NeoConsole](https://github.com/svenvc/NeoConsole), [P3 with Glorp](https://github.com/svenvc/P3) and [Seaside 3](https://github.com/seasidest/seaside)) using the project's Baseline:
 
 ````Smalltalk
 Metacello new
