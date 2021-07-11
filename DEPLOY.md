@@ -2,21 +2,21 @@
 
 Here are instructions on how to deploy the Reddit.st example web application.
 
-This is a basic installation for now, it lacks proper process control or up to date HTTPS, but these can be added easily.
+This is a basic installation for now, it lacks proper process control or up to date HTTPS, but these can be added easily later on.
 
 I used an Amazon AWS EC2 T4g.micro instance (1 GB) with Ubuntu Server 20.04.2 LTS.
 
 These machines use an ARM64 CPU (AWS Graviton2, Neoverse N1, Cortex-A76, ARM v8).
 
-https://aws.amazon.com/ec2/graviton/
-https://aws.amazon.com/ec2/instance-types/t4/
-https://en.wikipedia.org/wiki/Annapurna_Labs#AWS_Graviton2
+- https://aws.amazon.com/ec2/graviton/
+- https://aws.amazon.com/ec2/instance-types/t4/
+- https://en.wikipedia.org/wiki/Annapurna_Labs#AWS_Graviton2
 
 You might need to install some extra Ubuntu packages here or there (sudo apt install XX).
 
 First we need to install Pharo 9, using its Pharo Zeroconf Script tools (https://get.pharo.org). This gives us a local user-space installation.
 
-````
+````bash
 $ mkdir reddit
 $ cd reddit/
 $ curl http://get.pharo.org/90+vm | bash
@@ -24,15 +24,15 @@ $ ./pharo Pharo.image printVersion
 $ ./pharo Pharo.image save reddit
 ````
 
-Now we can load the projects code into the reddit.st image.
+Now we can load the project's code into the reddit.st image.
 
-````
+````bash
 $ ./pharo reddit.image metacello install github://svenvc/Reddit:main/ BaselineOfReddit
 ````
 
 The Reddit.st application uses persistency to a PostgreSQL database (using P3 and Glorp), so we need to install postgresql and configure it a bit.
 
-````
+````bash
 $ sudo apt install postgresql
 $ sudo su postgres
 $ psql
@@ -42,9 +42,11 @@ $ exit
 $ psql -U reddit -h localhost reddit_db
 ````
 
-We can now validate that our application can access the database. We do this using NeoConsole's REPL tool.
+We can now validate that our application can access the database. 
+We do this using NeoConsole's REPL tool.
+At the end we'll run an expression to create the necessary database tables.
 
-````
+````Smalltalk
 $ ./pharo reddit.image NeoConsole repl
 NeoConsole Pharo-9.0.0+build.1520.sha.25e11fc03bf7136d3f50f428726a8227f0a98415 (64 Bit)
 pharo> (P3Client new url: 'psql://reddit:secret@localhost/reddit_db') in: [ :client | [ client isWorking ] ensure: [ client close ] ].
@@ -88,13 +90,26 @@ Logout
 Logout finished
 
 an Array(an Array(7:42:18.021463 pm 9 July 2021))
+
+pharo> RedditDatabaseResource createTables
+
+Begin Transaction
+Create sequence REDDIT_LINKS_id_seq
+(0.022 s)
+CREATE TABLE REDDIT_LINKS (id integer  NOT NULL ,url character varying(64)  NULL ,title character varying(64)  NULL ,created timestamp without time zone  NULL ,points integer  NULL , CONSTRAINT REDDIT_LINKS_PK PRIMARY KEY  (id), CONSTRAINT REDDIT_LINKS_UNIQ UNIQUE  (id))
+(0.014 s)
+Commit Transaction
+Logout
+Logout finished
+
+RedditDatabaseResource
 pharo> quit
 Bye!
 ````
 
 Great! Now we are ready to run the application server.
 
-````
+````bash
 $ cat run.sh
 #!/bin/bash
 echo Starting the Reddit Seaside Web Application
@@ -103,7 +118,7 @@ nohup ./pharo reddit.image run.st &
 
 The run script itself contains the necessary Pharo code to launch our application.
 
-````
+````Smalltalk
 $ cat run.st
 (NeoConsoleTranscript onFileNamed: 'server-{1}.log') install.
 
@@ -136,13 +151,12 @@ Transcript crShow: 'Reddit Seaside Web Application is ready.'.
 ````
 
 By invoking the run.sh script our application server starts in the background. 
-If necessary we can connect to is using NeoConsole's REPL over telnet.
+If necessary we can connect to it using NeoConsole's REPL over telnet.
 
-````
+````bash
 $ cat repl.sh 
 #!/bin/bash
 echo Connecting to Telnet REPL at locahost:42011
 rlwrap telnet localhost 42011
 ````
-
 
