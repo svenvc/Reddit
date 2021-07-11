@@ -49,19 +49,24 @@ At the end we'll run an expression to create the necessary database tables.
 ````Smalltalk
 $ ./pharo reddit.image NeoConsole repl
 NeoConsole Pharo-9.0.0+build.1520.sha.25e11fc03bf7136d3f50f428726a8227f0a98415 (64 Bit)
+
 pharo> (P3Client new url: 'psql://reddit:secret@localhost/reddit_db') in: [ :client | [ client isWorking ] ensure: [ client close ] ].
 
 true
+
 pharo> P3LogEvent logToTranscript
 
 an AnnouncementSubscription
+
 pharo> (P3Client new url: 'psql://reddit:secret@localhost/reddit_db') in: [ :client | [ client isWorking ] ensure: [ client close ] ].
 
 2021-07-09 19:38:21 005 [P3] 437436 #Connect psql://reddit@localhost:5432/reddit_db MD5Password
 2021-07-09 19:38:21 006 [P3] 437436 #Query SELECT 65 AS N
 2021-07-09 19:38:21 007 [P3] 437436 #Result SELECT 1, 1 record, 1 colum, 0 ms
 2021-07-09 19:38:21 008 [P3] 437436 #Close
+
 true
+
 pharo> RedditDatabaseResource login: (Login new
 		database: PostgreSQLPlatform new;
 		username: 'reddit';
@@ -71,14 +76,16 @@ pharo> RedditDatabaseResource login: (Login new
 		yourself).
 
 RedditDatabaseResource
+
 pharo> RedditDatabaseResource login
 
 a Login(a PostgreSQLPlatform, 'reddit', 'localhost:5432_reddit_db', '')
+
 pharo> PharoDatabaseAccessor DefaultDriver: P3DatabaseDriver.
 
 PharoDatabaseAccessor
-pharo> RedditDatabaseResource testConnection
 
+pharo> RedditDatabaseResource testConnection
 
 2021-07-09 19:42:18 009 [P3] 437456 #Connect psql://reddit@localhost:5432/reddit_db MD5Password
 SELECT CURRENT_TIME, CURRENT_DATE
@@ -103,6 +110,7 @@ Logout
 Logout finished
 
 RedditDatabaseResource
+
 pharo> quit
 Bye!
 ````
