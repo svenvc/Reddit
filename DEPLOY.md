@@ -1,10 +1,10 @@
 # Deploy instructions
 
-Here are instructions on how to deploy the Reddit.st example web application.
+Here are instructions on how to deploy the Reddit.st example web application on a small Ubuntu Linux server.
 
-This is a basic installation for now, it lacks proper process control or up to date HTTPS, but these can be added easily later on.
+This is a basic installation for now, it lacks proper process control (monitoring, auto restart) or up to date HTTPS (using a reverse proxy), nor any form of load balancing, but these can be added easily later on. This is a naked, plain HTTP server.
 
-I used an Amazon AWS EC2 T4g.micro instance (1 GB) with Ubuntu Server 20.04.2 LTS.
+One option is to use an Amazon AWS EC2 T4g.micro instance (1 GB) with Ubuntu Server 20.04.x LTS.
 
 These machines use an ARM64 CPU (AWS Graviton2, Neoverse N1, Cortex-A76, ARM v8).
 
@@ -12,7 +12,11 @@ These machines use an ARM64 CPU (AWS Graviton2, Neoverse N1, Cortex-A76, ARM v8)
 - https://aws.amazon.com/ec2/instance-types/t4/
 - https://en.wikipedia.org/wiki/Annapurna_Labs#AWS_Graviton2
 
-You might need to install some extra Ubuntu packages here or there (sudo apt install XX).
+Another option is to use a Microsoft Azure Standard B1ls (1 vcpus, 0.5 GiB memory, Intel x86_64) with Ubuntu Server 20.04.x LTS.
+
+DigitalOcean would be another cheap option.
+
+You might need to install some extra Ubuntu packages here or there (sudo apt install XX). Note that we are running 64-bit Pharo on a 64-bit OS.
 
 First we need to install Pharo 9, using its Pharo Zeroconf Script tools (https://get.pharo.org). This gives us a local user-space installation.
 
@@ -20,6 +24,7 @@ First we need to install Pharo 9, using its Pharo Zeroconf Script tools (https:/
 $ mkdir reddit
 $ cd reddit/
 $ curl http://get.pharo.org/90+vm | bash
+$ ./pharo -version
 $ ./pharo Pharo.image printVersion
 $ ./pharo Pharo.image save reddit
 ````
