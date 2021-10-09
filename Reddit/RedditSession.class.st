@@ -22,6 +22,12 @@ RedditSession >> glorpSession [
 	^ glorpSession
 ]
 
+{ #category : #accessing }
+RedditSession >> inUnitOfWorkDo: block [
+	^ self withGlorpSession: [ :session |
+		session inUnitOfWorkDo: block ]
+]
+
 { #category : #private }
 RedditSession >> newGlorpSession [
 	| session |
@@ -32,11 +38,19 @@ RedditSession >> newGlorpSession [
 
 { #category : #private }
 RedditSession >> teardownGlorpSession [
-	self glorpSession logout
+	glorpSession ifNotNil: [ glorpSession logout ]
 ]
 
 { #category : #'parent/child' }
 RedditSession >> unregistered [
 	super unregistered.
 	self teardownGlorpSession
+]
+
+{ #category : #accessing }
+RedditSession >> withGlorpSession: block [
+	| result |
+	result := block value: self glorpSession.
+	self teardownGlorpSession.
+	^ result
 ]

@@ -55,7 +55,7 @@ RedditWebApp >> highestRankingLinks [
 		orderBy: [ :each | each points descending ];
 		limit: 20;
 		yourself.
-	^ self session glorpSession execute: query
+	^ self session withGlorpSession: [ :session | session execute: query ]
 ]
 
 { #category : #accessing }
@@ -65,7 +65,7 @@ RedditWebApp >> latestLinks [
 		orderBy: [ :each | each created descending ];
 		limit: 20;
 		yourself.
-	^ self session glorpSession execute: query
+	^ self session withGlorpSession: [ :session | session execute: query ]
 ]
 
 { #category : #accessing }
@@ -159,8 +159,7 @@ RedditWebApp >> showNewLinkEditor [
 		onAnswer: [ :answer | 
 			answer
 				ifTrue: [ 
-					self session glorpSession 
-						inUnitOfWorkDo: [ :session | 
+					self session inUnitOfWorkDo: [ :session | 
 							session register: self linkEditor createLink ] ].
 			self linkEditor: nil ]
 ]
@@ -174,16 +173,14 @@ RedditWebApp >> updateRoot: anHtmlRoot [
 
 { #category : #actions }
 RedditWebApp >> voteDown: link [
-	self session glorpSession
-		inUnitOfWorkDo: [ :session | 
+	self session inUnitOfWorkDo: [ :session | 
 			session register: link.
 			link voteDown ]
 ]
 
 { #category : #actions }
 RedditWebApp >> voteUp: link [
-	self session glorpSession
-		inUnitOfWorkDo: [ :session | 
+	self session inUnitOfWorkDo: [ :session | 
 			session register: link.
 			link voteUp ]
 ]
