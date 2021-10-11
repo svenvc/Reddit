@@ -154,9 +154,9 @@ ZnZincServerAdaptor default server logLevel: 2; logToTranscript.
 
 WAAdmin clearAll.
 WAEnvironment configureApplicationDefaults.
-WAWalkbackErrorHandler configureApplicationExceptionHandlingDefaults.
 WAEnvironment registerDefaultRequestHandlers.
 WAAdmin applicationDefaults removeParent: WADevelopmentConfiguration instance.
+WAAdmin applicationExceptionHandlingDefaults at: #exceptionHandler put: WAErrorHandler.
 RedditWebApp initialize.
 WAAdmin defaultDispatcher defaultName: 'reddit'.
 
